@@ -1,0 +1,14 @@
+
+----- To Do -----
+need to seperate files
+gitignore - put in too late
+
+
+----- Help -----
+can't get default movie to work
+
+
+
+
+----- Double Check -----
+random.txt - not all work

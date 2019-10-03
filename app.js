@@ -1,11 +1,12 @@
+// -------- Requires ----------
 var axios = require("axios");
+require('dotenv').config();
 var fs = require("fs");
+var keys = require("./keys");
 var Spotify = require('node-spotify-api');
 
-var spotify = new Spotify({
-    id: "e744f974be4849faa28adb4393d15f52",
-    secret: "e8380511aaf74f8ba5e344eee84bf04a"
-  });
+console.log(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 
 
 // -------- Find Concert API ----------
@@ -46,8 +47,8 @@ function findConcert(artist){
     );
 }
 
-// -------- Spotify API ----------
 
+// -------- Spotify API ----------
 // client ID = e744f974be4849faa28adb4393d15f52
 // client secret = e8380511aaf74f8ba5e344eee84bf04a
 
@@ -55,6 +56,7 @@ function spotifyID(song){
     if(song === undefined){
         song = "The Sign";
     } 
+    var spotify = new Spotify(keys.spotify);
     spotify.search({ type: 'track', query: song }, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
@@ -79,11 +81,16 @@ function spotifyID(song){
 
 // -------- Movie API ---------- 
 function findMovie(movieName){
-    var url = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
+    var url = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&tomatoes=true&apikey=trilogy";
+    if(movieName === undefined){
+        movieName = "Mr. Nobody";
+    };
+    console.log(movieName)
     axios.get(url).then(
+
         function(response){
-            // console.log(response.data);
+            console.log(response.data);
+            
             console.log("\n---------------------------\n");
             console.log("Title: " + response.data.Title);
             console.log("Year: " + response.data.Year);
@@ -94,7 +101,6 @@ function findMovie(movieName){
             console.log("Plot: " + response.data.Plot);
             console.log("Actors: " + response.data.Actors);
             console.log("\n---------------------------\n");
-        
         },
     
         function(error) {
@@ -113,11 +119,11 @@ function findMovie(movieName){
               console.log("Error", error.message);
             }
             console.log(error.config);
-          }
+        }
     );
 }
 
-
+// -------- command f(x)s ----------
 function doSomething(){
     fs.readFile("random.txt", "utf8", function(err, data){
         console.log(data);
@@ -125,11 +131,13 @@ function doSomething(){
         if(dataParts.length === 2){
             console.log(dataParts[0]);
             console.log(dataParts[1]);
-            commandProcess(dataParts[0], dataParts[1]);
+            commandProcess(dataParts[0].trim(), dataParts[1].trim());
         }
     })
 }
 
+
+// -------- command f(x)s ----------
 function commandProcess(command, value){
     switch(command){
         case "concert-this":
@@ -151,6 +159,6 @@ function commandProcess(command, value){
 }
 
 var action = process.argv[2];
-var value = process.argv[3];
+var value = process.argv.splice(3).join("+");
 
 commandProcess(action, value);
