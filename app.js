@@ -1,5 +1,11 @@
 var axios = require("axios");
 var fs = require("fs");
+var Spotify = require('node-spotify-api');
+
+var spotify = new Spotify({
+    id: "e744f974be4849faa28adb4393d15f52",
+    secret: "e8380511aaf74f8ba5e344eee84bf04a"
+  });
 
 
 // -------- Find Concert API ----------
@@ -45,26 +51,33 @@ function findConcert(artist){
 // client ID = e744f974be4849faa28adb4393d15f52
 // client secret = e8380511aaf74f8ba5e344eee84bf04a
 
+function spotifyID(song){
+    if(song === undefined){
+        song = "The Sign";
+    } 
+    spotify.search({ type: 'track', query: song }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+        var songs = data.tracks.items;
+      for(var j = 0; j < songs.length; j++){
+          
+          var artists = "";
+          for(var k = 0; k < songs[j].artists.length; k++){
+            artists = artists+songs[j].artists[k].name + ", ";
+          }
+          console.log("Artist(s): " + artists);
+          console.log("Song Title: " + songs[j].name);
+          console.log("Preview: " + songs[j].preview_url);
+          console.log("Album: " + songs[j].album.name);
+          console.log("\n------------------------\n")
+      } 
+    //   console.log(data); 
+      });
+};
 
-// already downloaded package but spotify is a labrinth
 
-
-// * This will show the following information about the song in your terminal/bash window
-
-// * Artist(s)
-
-// * The song's name
-
-// * A preview link of the song from Spotify
-
-// * The album that the song is from
-
-// function spotifyID(song){
-//     var url = "http://open.spotify.com/" + song + 
-// };
-
-
-// -------- Movie API ---------- still need rotten tomatoes rating
+// -------- Movie API ---------- 
 function findMovie(movieName){
     var url = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
@@ -75,6 +88,7 @@ function findMovie(movieName){
             console.log("Title: " + response.data.Title);
             console.log("Year: " + response.data.Year);
             console.log("IMBD Rating: " + response.data.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
             console.log("Country: " + response.data.Country);
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
