@@ -47,11 +47,6 @@ function findConcert(artist){
     );
 }
 
-
-// -------- Spotify API ----------
-// client ID = e744f974be4849faa28adb4393d15f52
-// client secret = e8380511aaf74f8ba5e344eee84bf04a
-
 function spotifyID(song){
     if(song === undefined){
         song = "The Sign";
