@@ -71,6 +71,7 @@ function findMovie(movieName){
     axios.get(url).then(
         function(response){
             // console.log(response.data);
+            console.log("\n---------------------------\n");
             console.log("Title: " + response.data.Title);
             console.log("Year: " + response.data.Year);
             console.log("IMBD Rating: " + response.data.imdbRating);
